@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>白子涵的个人主页</title>
+    <style>
+        /* 全局及基础样式 */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --card-bg: #fff;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 初始主页样式 */
+        #main-page {
+            text-align: center;
+            padding-top: 50px;
+            animation: fadeIn 0.5s ease;
+        }
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--secondary-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            /* 这里可以替换为你的真实照片URL */
+            background-color: #ccc; 
+        }
+        .basic-info h1 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        .basic-info p {
+            margin: 5px 0;
+            color: #555;
+            font-size: 1.1em;
+        }
+        .contact-info {
+            font-size: 0.9em;
+            color: #777;
+            margin-bottom: 40px;
+        }
+
+        /* 导航按钮模块 */
+        .nav-grid {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .nav-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .nav-btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        /* 内容面板样式（默认隐藏） */
+        .panel {
+            display: none;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-top: 20px;
+            animation: slideIn 0.4s ease forwards;
+        }
+        .panel-header {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid var(--bg-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .back-btn {
+            background-color: #ecf0f1;
+            color: var(--primary-color);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+            margin-right: 20px;
+        }
+        .back-btn:hover {
+            background-color: #bdc3c7;
+        }
+        .panel-header h2 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        /* 列表项与卡片样式 */
+        .item-card {
+            background: #fdfdfd;
+            border-left: 4px solid var(--secondary-color);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 5px 5px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        }
+        .item-card h3 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+        .item-card p {
+            margin: 5px 0;
+            font-size: 0.95em;
+        }
+        .tags span {
+            display: inline-block;
+            background: #e1f0fa;
+            color: var(--secondary-color);
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-right: 8px;
+            margin-top: 5px;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div id="main-page">
+        <img src="" alt="白子涵的照片" class="profile-img" style="background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23999%22%3E%3Cpath d=%22M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z%22/%3E%3C/svg%3E');">
+        
+        <div class="basic-info">
+            <h1>你好，我是 白子涵 👋 [cite: 71]</h1>
+            <p>燕山大学 | 电子信息工程专业 [cite: 45]</p>
+            <p>专业排名：2/129（前1.6%） | GPA：4.125/4.5 [cite: 45]</p>
+        </div>
+        
+        <div class="contact-info">
+            手机：15128072898 [cite: 59] | 邮箱：1410353124@stumail.ysu.edu.cn [cite: 60]<br>
+            籍贯：河北省邯郸市 [cite: 61] | 生日：2005.12.01 [cite: 64] | 政治面貌：共青团员 [cite: 62]
+        </div>
+
+        <div class="nav-grid">
+            <button class="nav-btn" onclick="showPanel('research-panel')">🔬 科研经历</button>
+            <button class="nav-btn" onclick="showPanel('competition-panel')">🏆 竞赛经历</button>
+            <button class="nav-btn" onclick="showPanel('skills-panel')">🛠️ 个人能力</button>
+            <button class="nav-btn" onclick="showPanel('courses-panel')">📚 本科课程</button>
+            <button class="nav-btn" onclick="showPanel('honors-panel')">🎖️ 荣誉证书</button>
+        </div>
+    </div>
+
+    <div id="research-panel" class="panel">
+        <div class="panel-header">
+            <button class="back-btn" onclick="goBack()">❮ 返回主页</button>
+            <h2>科研经历</h2>
+        </div>
+        <div class="item-card">
+            <h3>面向空天地一体化高灵敏度通信感知智能平台 [cite: 36]</h3>
+            <p><strong>角色：</strong> 项目主要负责人 | <strong>时间：</strong> 2025.10 - 至今 [cite: 36]</p>
+        </div>
+        <div class="item-card">
+            <h3>云游天下-5G+创新旅游新体验 [cite: 35]</h3>
+            <p><strong>荣誉：</strong> 朱顺炎“行知训练营”优秀项目奖 | <strong>时间：</strong> 2025.03-2025.07 [cite: 35]</p>
+        </div>
+        <div class="item-card">
+            <h3>基于树莓派的跨镜追踪(REID) [cite: 32]</h3>
+            <p><strong>角色：</strong> 项目第二负责人 | <strong>时间：</strong> 2024.12 - 2025.10 [cite: 32]</p>
+            <p>负责全面利用 TensorFlow Lite (TFLite) 工具链，对检测与Re-ID模型进行深度量化（INT8）与模型剪枝，实现模型尺寸和计算资源的最小化，确保模型在树莓派上的高帧率运行。 [cite: 34]</p>
+        </div>
+        <div class="item-card">
+            <h3>基于opencv的人脸属性识别 [cite: 29]</h3>
+            <p><strong>角色：</strong> 项目主要负责人 | <strong>时间：</strong> 2023.12 - 2024.10 [cite: 29]</p>
+            <p>负责使用OpenCV内置的Haar级联分类器对输入图像进行实时人脸检测，通过分析人脸区域的纹理、轮廓等特征，结合支持向量机（SVM）这一传统机器学习分类器，实现人脸性别的判别，最终获得校级结项。 [cite: 31]</p>
+        </div>
+    </div>
+
+    <div id="competition-panel" class="panel">
+        <div class="panel-header">
+            <button class="back-btn" onclick="goBack()">❮ 返回主页</button>
+            <h2>竞赛经历</h2>
+        </div>
+        <div class="item-card">
+            <h3>2025数学建模美赛 H奖励 [cite: 3]</h3>
+            <p><strong>角色：</strong> 队长 [cite: 3]</p>
+            <p>研究《OptimizationIssues : Sustainable Tourism Development》，构建多元线性和非线性规划模型，建立多目标规划模型并通过序贯二次规划算法求解。 [cite: 3, 4]</p>
+        </div>
+        <div class="item-card">
+            <h3>2025统计建模省级 一等奖 [cite: 5]</h3>
+            <p><strong>角色：</strong> 第二负责人 [cite: 5]</p>
+            <p>《基于K-means聚类和AMISA时间序列预测的农业灾害防控研究》，利用SPSS多重插补法处理缺失数据，K-means聚类揭示灾害特征，ARIMA模型进行时序预测。 [cite: 5, 6]</p>
+        </div>
+        <div class="item-card">
+            <h3>2024年数学建模省级 二等奖 [cite: 7]</h3>
+            <p><strong>角色：</strong> 队长 [cite: 7]</p>
+            <p>《基于螺旋线原理的“板凳龙”运动过程优化设计》，利用牛顿迭代法优化“板凳龙”运动，建立循迹模型、行停模型等。 [cite: 7, 8]</p>
+        </div>
+        <div class="item-card">
+            <h3>2025年“大唐杯”新一代信息通信技术大赛 国家级三等奖 [cite: 9]</h3>
+            <p><strong>角色：</strong> 队长 [cite: 9]</p>
+        </div>
+        <div class="item-card">
+            <h3>2025年NCCCU计算机能力挑战赛 省级三等奖 [cite: 10]</h3>
+            <p><strong>角色：</strong> 个人赛 [cite: 10]</p>
+        </div>
+        <div class="item-card">
+            <h3>2025年全国大学生电子设计大赛 校级二等奖 [cite: 11]</h3>
+            <p><strong>职责：</strong> 负责maxicam视觉算法模块 [cite: 11]</p>
+        </div>
+    </div>
+
+    <div id="skills-panel" class="panel">
+        <div class="panel-header">
+            <button class="back-btn" onclick="goBack()">❮ 返回主页</button>
+            <h2>个人能力</h2>
+        </div>
+        <div class="item-card">
+            <h3>语言与英语能力</h3>
+            <div class="tags">
+                <span>CET-4 [cite: 46]</span>
+                <span>CET-6 [cite: 46]</span>
+            </div>
+        </div>
+        <div class="item-card">
+            <h3>专业技能 [cite: 49]</h3>
+            <p>擅长数学建模、软硬件结合。 [cite: 49]</p>
+            <div class="tags">
+                <span>C++ [cite: 49]</span>
+                <span>VHDL [cite: 49]</span>
+                <span>Python [cite: 49]</span>
+                <span>Matlab [cite: 49]</span>
+                <span>SPSS [cite: 49]</span>
+            </div>
+        </div>
+        <div class="item-card">
+            <h3>工具与方法论 [cite: 49]</h3>
+            <p>掌握图像处理工具和深度学习方法；熟悉Zotero等文献管理工具。 [cite: 49]</p>
+            <div class="tags">
+                <span>HFSS [cite: 49]</span>
+                <span>QuartusⅡ [cite: 49]</span>
+                <span>multisim [cite: 49]</span>
+                <span>SOLIDWORKS [cite: 49]</span>
+                <span>keil [cite: 49]</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="courses-panel" class="panel">
+        <div class="panel-header">
+            <button class="back-btn" onclick="goBack()">❮ 返回主页</button>
+            <h2>核心本科课程</h2>
+        </div>
+        <div class="item-card">
+            <h3>专业基础与核心课程表现 [cite: 47]</h3>
+            <ul>
+                <li>C++面向对象程序设计：<strong>96分</strong> [cite: 47]</li>
+                <li>电磁场与微波：<strong>95分</strong> [cite: 47]</li>
+                <li>信号与系统：<strong>93分</strong> [cite: 47]</li>
+                <li>数字信号处理：<strong>92分</strong> [cite: 47]</li>
+                <li>高等数学AⅡ：<strong>96分</strong> [cite: 47]</li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="honors-panel" class="panel">
+        <div class="panel-header">
+            <button class="back-btn" onclick="goBack()">❮ 返回主页</button>
+            <h2>荣誉证书与实践经历</h2>
+        </div>
+        <div class="item-card">
+            <h3>荣誉奖项 [cite: 48]</h3>
+            <ul>
+                <li>校一等奖学金（2%，连续四学期） [cite: 48]</li>
+                <li>校三好学生（连续两年） [cite: 48]</li>
+                <li>校优秀共青团员 [cite: 48]</li>
+                <li>优秀新生班主任 [cite: 48]</li>
+                <li>科创之星（院仅五人） [cite: 48]</li>
+            </ul>
+        </div>
+        <div class="item-card">
+            <h3>学生工作与实践志愿</h3>
+            <ul>
+                <li><strong>燕山大学网络信息协会部门部长</strong> (2024.6-2025.6)：组织开展课程讲座，累计劳动时长160h+。 [cite: 22]</li>
+                <li><strong>班级学习委员</strong> (2023.10-至今)：发挥学科强项，开展定点帮扶，累计志愿时长50h+。 [cite: 21]</li>
+                <li><strong>河北省青少年无人机大赛志愿者</strong> (2025.6)：负责操作类比赛区问题解惑及突发情况应急。 [cite: 23]</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 隐藏所有面板并显示主页
+    function goBack() {
+        document.getElementById('main-page').style.display = 'block';
+        const panels = document.getElementsByClassName('panel');
+        for (let i = 0; i < panels.length; i++) {
+            panels[i].style.display = 'none';
+        }
+    }
+
+    // 隐藏主页并显示对应ID的面板
+    function showPanel(panelId) {
+        document.getElementById('main-page').style.display = 'none';
+        
+        const panels = document.getElementsByClassName('panel');
+        for (let i = 0; i < panels.length; i++) {
+            panels[i].style.display = 'none';
+        }
+        
+        document.getElementById(panelId).style.display = 'block';
+        // 每次切换时滚动回页面顶部
+        window.scrollTo(0, 0); 
+    }
+</script>
+
+</body>
+</html>
