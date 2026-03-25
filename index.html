@@ -3,351 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>白子涵的个人主页</title>
+    <title>白子涵 - 个人数字档案</title>
     <style>
-        /* 全局及基础样式 */
+        /* 全局现代极客风重置 */
         :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --bg-color: #f4f7f6;
-            --text-color: #333;
-            --card-bg: #fff;
+            --bg-color: #0b0f19;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --accent-cyan: #06b6d4;
+            --accent-blue: #3b82f6;
+            --card-bg: rgba(30, 41, 59, 0.7);
         }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
+            color: var(--text-main);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.15), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.15), transparent 25%);
+            background-attachment: fixed;
         }
 
-        /* 初始主页样式 */
-        #main-page {
+        /* 导航栏 */
+        nav {
+            position: fixed;
+            top: 0; width: 100%;
+            background: rgba(11, 15, 25, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
             text-align: center;
-            padding-top: 50px;
-            animation: fadeIn 0.5s ease;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .profile-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--secondary-color);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            /* 这里可以替换为你的真实照片URL */
-            background-color: #ccc; 
+        nav a {
+            color: var(--text-main);
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 500;
+            transition: color 0.3s;
         }
-        .basic-info h1 {
-            color: var(--primary-color);
-            margin-bottom: 5px;
-        }
-        .basic-info p {
-            margin: 5px 0;
-            color: #555;
-            font-size: 1.1em;
-        }
-        .contact-info {
-            font-size: 0.9em;
-            color: #777;
-            margin-bottom: 40px;
-        }
+        nav a:hover { color: var(--accent-cyan); }
 
-        /* 导航按钮模块 */
-        .nav-grid {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        .nav-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.1em;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .nav-btn:hover {
-            background-color: var(--secondary-color);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
-
-        /* 内容面板样式（默认隐藏） */
-        .panel {
-            display: none;
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-top: 20px;
-            animation: slideIn 0.4s ease forwards;
-        }
-        .panel-header {
+        /* --- 核心：3D 头部全屏展示区 --- */
+        .hero {
+            min-height: 100vh;
             display: flex;
             align-items: center;
-            border-bottom: 2px solid var(--bg-color);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
+            justify-content: center;
+            perspective: 1000px; /* 3D 景深 */
+            padding-top: 60px;
         }
-        .back-btn {
-            background-color: #ecf0f1;
-            color: var(--primary-color);
-            border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.2s;
-            margin-right: 20px;
-        }
-        .back-btn:hover {
-            background-color: #bdc3c7;
-        }
-        .panel-header h2 {
-            margin: 0;
-            color: var(--primary-color);
+        
+        /* 3D 卡片容器 */
+        .tilt-card {
+            width: 400px;
+            height: 550px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s ease; /* 鼠标移动时的平滑度 */
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
 
-        /* 列表项与卡片样式 */
-        .item-card {
-            background: #fdfdfd;
-            border-left: 4px solid var(--secondary-color);
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 0 5px 5px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.02);
+        /* 卡片背景层 */
+        .card-bg {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            transform: translateZ(0);
+            overflow: hidden;
         }
-        .item-card h3 {
-            margin-top: 0;
+
+        /* 燕山大学校徽 (背景层) */
+        .uni-logo {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            opacity: 0.8;
+            transform: translateZ(20px);
+        }
+
+        /* 3D 破框而出的人物照片 */
+        .avatar-popout {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%) translateZ(80px) scale(1.1); /* 核心：Z轴拉升产生立体感 */
+            height: 400px; /* 根据你的照片高度调整 */
+            pointer-events: none; /* 让鼠标事件穿透到卡片底板 */
+            filter: drop-shadow(0 20px 20px rgba(0,0,0,0.5));
+        }
+
+        /* 个人信息悬浮层 */
+        .hero-info {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            right: 30px;
+            transform: translateZ(50px);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+        .hero-info h1 {
+            font-size: 2.5em;
+            background: linear-gradient(to right, var(--accent-cyan), var(--accent-blue));
+            -webkit-background-clip: text;
+            color: transparent;
             margin-bottom: 5px;
-            color: var(--primary-color);
         }
-        .item-card p {
-            margin: 5px 0;
-            font-size: 0.95em;
+        .hero-info p { font-size: 1.1em; color: #ddd; }
+
+        /* --- 丝滑滚动内容区块 --- */
+        .section-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 80px 20px;
+            overflow-x: hidden; /* 防止滑动时的横向滚动条 */
         }
-        .tags span {
+        h2.section-title {
+            font-size: 2em;
+            margin-bottom: 40px;
             display: inline-block;
-            background: #e1f0fa;
-            color: var(--secondary-color);
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 0.85em;
-            margin-right: 8px;
-            margin-top: 5px;
+            border-bottom: 3px solid var(--accent-cyan);
+            padding-bottom: 10px;
         }
 
-        /* 动画效果 */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        /* 内容卡片 */
+        .content-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .content-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.2);
+            border-color: rgba(6, 182, 212, 0.4);
         }
+        .content-card h3 { color: var(--accent-cyan); margin-bottom: 10px; font-size: 1.4em;}
+        .card-meta { font-size: 0.9em; color: var(--accent-blue); margin-bottom: 15px; }
+        
+        /* --- 核心：滚动入场动画样式 (初始状态) --- */
+        .slide-left {
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .slide-right {
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        /* JavaScript 触发的显示状态 */
+        .slide-left.show, .slide-right.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div id="main-page">
-        <img src="" alt="白子涵的照片" class="profile-img" style="background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22%23999%22%3E%3Cpath d=%22M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z%22/%3E%3C/svg%3E');">
-        
-        <div class="basic-info">
-            <h1>你好，我是 白子涵 👋 [cite: 71]</h1>
-            <p>燕山大学 | 电子信息工程专业 [cite: 45]</p>
-            <p>专业排名：2/129（前1.6%） | GPA：4.125/4.5 [cite: 45]</p>
-        </div>
-        
-        <div class="contact-info">
-            手机：15128072898 [cite: 59] | 邮箱：1410353124@stumail.ysu.edu.cn [cite: 60]<br>
-            籍贯：河北省邯郸市 [cite: 61] | 生日：2005.12.01 [cite: 64] | 政治面貌：共青团员 [cite: 62]
-        </div>
+    <nav>
+        <a href="#home">首页</a>
+        <a href="#research">科研经历</a>
+        <a href="#competition">竞赛经历</a>
+        <a href="#skills">专业能力</a>
+    </nav>
 
-        <div class="nav-grid">
-            <button class="nav-btn" onclick="showPanel('research-panel')">🔬 科研经历</button>
-            <button class="nav-btn" onclick="showPanel('competition-panel')">🏆 竞赛经历</button>
-            <button class="nav-btn" onclick="showPanel('skills-panel')">🛠️ 个人能力</button>
-            <button class="nav-btn" onclick="showPanel('courses-panel')">📚 本科课程</button>
-            <button class="nav-btn" onclick="showPanel('honors-panel')">🎖️ 荣誉证书</button>
+    <section id="home" class="hero">
+        <div class="tilt-card" id="tilt-card">
+            <div class="card-bg"></div>
+            
+            <img src="https://upload.wikimedia.org/wikipedia/zh/thumb/3/3d/Yanshan_University_logo.svg/1200px-Yanshan_University_logo.svg.png" alt="燕山大学校徽" class="uni-logo">
+            
+            <img src="avatar-transparent.png" alt="白子涵" class="avatar-popout">
+            
+            <div class="hero-info">
+                <h1>白子涵 [cite: 71]</h1>
+                <p>电子信息工程 [cite: 45] | 燕山大学 [cite: 45]</p>
+                <p style="font-size: 0.9em; margin-top: 5px; color: var(--text-muted);">
+                    擅长视觉算法、软硬件结合与数学建模
+                </p>
+            </div>
         </div>
-    </div>
+    </section>
 
-    <div id="research-panel" class="panel">
-        <div class="panel-header">
-            <button class="back-btn" onclick="goBack()">❮ 返回主页</button>
-            <h2>科研经历</h2>
-        </div>
-        <div class="item-card">
+    <div class="section-container" id="research">
+        <h2 class="section-title slide-left">科研经历 🔬</h2>
+        
+        <div class="content-card slide-left">
             <h3>面向空天地一体化高灵敏度通信感知智能平台 [cite: 36]</h3>
-            <p><strong>角色：</strong> 项目主要负责人 | <strong>时间：</strong> 2025.10 - 至今 [cite: 36]</p>
+            <div class="card-meta">项目主要负责人 | 2025.10 - 至今</div>
+            <p>致力于前沿通信感知技术的智能化平台研发与实现。</p>
         </div>
-        <div class="item-card">
-            <h3>云游天下-5G+创新旅游新体验 [cite: 35]</h3>
-            <p><strong>荣誉：</strong> 朱顺炎“行知训练营”优秀项目奖 | <strong>时间：</strong> 2025.03-2025.07 [cite: 35]</p>
-        </div>
-        <div class="item-card">
+
+        <div class="content-card slide-left" style="transition-delay: 0.1s;">
             <h3>基于树莓派的跨镜追踪(REID) [cite: 32]</h3>
-            <p><strong>角色：</strong> 项目第二负责人 | <strong>时间：</strong> 2024.12 - 2025.10 [cite: 32]</p>
-            <p>负责全面利用 TensorFlow Lite (TFLite) 工具链，对检测与Re-ID模型进行深度量化（INT8）与模型剪枝，实现模型尺寸和计算资源的最小化，确保模型在树莓派上的高帧率运行。 [cite: 34]</p>
+            <div class="card-meta">项目第二负责人 | 2024.12 - 2025.10</div>
+            <p>融合视觉特征的多模态身份识别系统。全面利用 TensorFlow Lite 工具链对检测与 Re-ID 模型进行 INT8 深度量化与模型剪枝，确保在树莓派嵌入式载体上的高帧率运行 [cite: 33, 34]。</p>
         </div>
-        <div class="item-card">
+
+        <div class="content-card slide-left" style="transition-delay: 0.2s;">
             <h3>基于opencv的人脸属性识别 [cite: 29]</h3>
-            <p><strong>角色：</strong> 项目主要负责人 | <strong>时间：</strong> 2023.12 - 2024.10 [cite: 29]</p>
-            <p>负责使用OpenCV内置的Haar级联分类器对输入图像进行实时人脸检测，通过分析人脸区域的纹理、轮廓等特征，结合支持向量机（SVM）这一传统机器学习分类器，实现人脸性别的判别，最终获得校级结项。 [cite: 31]</p>
+            <div class="card-meta">项目主要负责人 | 2023.12 - 2024.10</div>
+            <p>利用传统计算机视觉技术，通过 Haar 级联分类器与 SVM 支持向量机结合，实现从复杂背景中提取人脸纹理轮廓，并进行性别、情绪等属性的精准判别 [cite: 30, 31]。</p>
         </div>
     </div>
 
-    <div id="competition-panel" class="panel">
-        <div class="panel-header">
-            <button class="back-btn" onclick="goBack()">❮ 返回主页</button>
-            <h2>竞赛经历</h2>
-        </div>
-        <div class="item-card">
+    <div class="section-container" id="competition">
+        <h2 class="section-title slide-right">竞赛经历 🏆</h2>
+        
+        <div class="content-card slide-right">
             <h3>2025数学建模美赛 H奖励 [cite: 3]</h3>
-            <p><strong>角色：</strong> 队长 [cite: 3]</p>
-            <p>研究《OptimizationIssues : Sustainable Tourism Development》，构建多元线性和非线性规划模型，建立多目标规划模型并通过序贯二次规划算法求解。 [cite: 3, 4]</p>
+            <div class="card-meta">队长</div>
+            <p>研究《OptimizationIssues : Sustainable Tourism Development》，构建多元线性和非线性规划模型，建立多目标规划模型并通过序贯二次规划算法进行求解 [cite: 4]。</p>
         </div>
-        <div class="item-card">
+
+        <div class="content-card slide-right" style="transition-delay: 0.1s;">
             <h3>2025统计建模省级 一等奖 [cite: 5]</h3>
-            <p><strong>角色：</strong> 第二负责人 [cite: 5]</p>
-            <p>《基于K-means聚类和AMISA时间序列预测的农业灾害防控研究》，利用SPSS多重插补法处理缺失数据，K-means聚类揭示灾害特征，ARIMA模型进行时序预测。 [cite: 5, 6]</p>
+            <div class="card-meta">第二负责人</div>
+            <p>利用 SPSS 多重插补法、K-means 聚类算法以及 ARIMA 时序预测模型，构建了农业灾害防控研究体系 [cite: 6]。</p>
         </div>
-        <div class="item-card">
-            <h3>2024年数学建模省级 二等奖 [cite: 7]</h3>
-            <p><strong>角色：</strong> 队长 [cite: 7]</p>
-            <p>《基于螺旋线原理的“板凳龙”运动过程优化设计》，利用牛顿迭代法优化“板凳龙”运动，建立循迹模型、行停模型等。 [cite: 7, 8]</p>
-        </div>
-        <div class="item-card">
-            <h3>2025年“大唐杯”新一代信息通信技术大赛 国家级三等奖 [cite: 9]</h3>
-            <p><strong>角色：</strong> 队长 [cite: 9]</p>
-        </div>
-        <div class="item-card">
-            <h3>2025年NCCCU计算机能力挑战赛 省级三等奖 [cite: 10]</h3>
-            <p><strong>角色：</strong> 个人赛 [cite: 10]</p>
-        </div>
-        <div class="item-card">
-            <h3>2025年全国大学生电子设计大赛 校级二等奖 [cite: 11]</h3>
-            <p><strong>职责：</strong> 负责maxicam视觉算法模块 [cite: 11]</p>
+
+        <div class="content-card slide-right" style="transition-delay: 0.2s;">
+            <h3>全国大学生电子设计大赛 校级二等奖 [cite: 11]</h3>
+            <div class="card-meta">负责 maxicam 视觉算法模块 [cite: 11]</div>
         </div>
     </div>
 
-    <div id="skills-panel" class="panel">
-        <div class="panel-header">
-            <button class="back-btn" onclick="goBack()">❮ 返回主页</button>
-            <h2>个人能力</h2>
-        </div>
-        <div class="item-card">
-            <h3>语言与英语能力</h3>
-            <div class="tags">
-                <span>CET-4 [cite: 46]</span>
-                <span>CET-6 [cite: 46]</span>
-            </div>
-        </div>
-        <div class="item-card">
-            <h3>专业技能 [cite: 49]</h3>
-            <p>擅长数学建模、软硬件结合。 [cite: 49]</p>
-            <div class="tags">
-                <span>C++ [cite: 49]</span>
-                <span>VHDL [cite: 49]</span>
-                <span>Python [cite: 49]</span>
-                <span>Matlab [cite: 49]</span>
-                <span>SPSS [cite: 49]</span>
-            </div>
-        </div>
-        <div class="item-card">
-            <h3>工具与方法论 [cite: 49]</h3>
-            <p>掌握图像处理工具和深度学习方法；熟悉Zotero等文献管理工具。 [cite: 49]</p>
-            <div class="tags">
-                <span>HFSS [cite: 49]</span>
-                <span>QuartusⅡ [cite: 49]</span>
-                <span>multisim [cite: 49]</span>
-                <span>SOLIDWORKS [cite: 49]</span>
-                <span>keil [cite: 49]</span>
-            </div>
-        </div>
-    </div>
-
-    <div id="courses-panel" class="panel">
-        <div class="panel-header">
-            <button class="back-btn" onclick="goBack()">❮ 返回主页</button>
-            <h2>核心本科课程</h2>
-        </div>
-        <div class="item-card">
-            <h3>专业基础与核心课程表现 [cite: 47]</h3>
-            <ul>
-                <li>C++面向对象程序设计：<strong>96分</strong> [cite: 47]</li>
-                <li>电磁场与微波：<strong>95分</strong> [cite: 47]</li>
-                <li>信号与系统：<strong>93分</strong> [cite: 47]</li>
-                <li>数字信号处理：<strong>92分</strong> [cite: 47]</li>
-                <li>高等数学AⅡ：<strong>96分</strong> [cite: 47]</li>
-            </ul>
-        </div>
-    </div>
-
-    <div id="honors-panel" class="panel">
-        <div class="panel-header">
-            <button class="back-btn" onclick="goBack()">❮ 返回主页</button>
-            <h2>荣誉证书与实践经历</h2>
-        </div>
-        <div class="item-card">
-            <h3>荣誉奖项 [cite: 48]</h3>
-            <ul>
-                <li>校一等奖学金（2%，连续四学期） [cite: 48]</li>
-                <li>校三好学生（连续两年） [cite: 48]</li>
-                <li>校优秀共青团员 [cite: 48]</li>
-                <li>优秀新生班主任 [cite: 48]</li>
-                <li>科创之星（院仅五人） [cite: 48]</li>
-            </ul>
-        </div>
-        <div class="item-card">
-            <h3>学生工作与实践志愿</h3>
-            <ul>
-                <li><strong>燕山大学网络信息协会部门部长</strong> (2024.6-2025.6)：组织开展课程讲座，累计劳动时长160h+。 [cite: 22]</li>
-                <li><strong>班级学习委员</strong> (2023.10-至今)：发挥学科强项，开展定点帮扶，累计志愿时长50h+。 [cite: 21]</li>
-                <li><strong>河北省青少年无人机大赛志愿者</strong> (2025.6)：负责操作类比赛区问题解惑及突发情况应急。 [cite: 23]</li>
-            </ul>
-        </div>
-    </div>
-</div>
-
-<script>
-    // 隐藏所有面板并显示主页
-    function goBack() {
-        document.getElementById('main-page').style.display = 'block';
-        const panels = document.getElementsByClassName('panel');
-        for (let i = 0; i < panels.length; i++) {
-            panels[i].style.display = 'none';
-        }
-    }
-
-    // 隐藏主页并显示对应ID的面板
-    function showPanel(panelId) {
-        document.getElementById('main-page').style.display = 'none';
+    <div class="section-container" id="skills">
+        <h2 class="section-title slide-left">专业能力 🛠️</h2>
         
-        const panels = document.getElementsByClassName('panel');
-        for (let i = 0; i < panels.length; i++) {
-            panels[i].style.display = 'none';
-        }
-        
-        document.getElementById(panelId).style.display = 'block';
-        // 每次切换时滚动回页面顶部
-        window.scrollTo(0, 0); 
-    }
-</script>
+        <div class="content-card slide-left">
+            <h3>核心技能栈</h3>
+            <p style="margin-top: 10px; line-height: 2;">
+                <span style="background: rgba(6,182,212,0.2); color: #fff; padding: 5px 12px; border-radius: 20px; margin-right: 10px;">C++ / Python / VHDL</span>
+                <span style="background: rgba(59,130,246,0.2); color: #fff; padding: 5px 12px; border-radius: 20px; margin-right: 10px;">OpenCV / 视觉算法</span>
+                <span style="background: rgba(139,92,246,0.2); color: #fff; padding: 5px 12px; border-radius: 20px; margin-right: 10px;">TensorFlow Lite</span>
+                <span style="background: rgba(236,72,153,0.2); color: #fff; padding: 5px 12px; border-radius: 20px; margin-right: 10px;">Matlab / SPSS</span>
+            </p>
+            <p style="margin-top: 15px; color: var(--text-muted);">
+                掌握图像处理工具和深度学习方法，熟练运用 HFSS、QuartusⅡ、multisim、SOLIDWORKS、keil 等仿真工具 [cite: 49]。
+            </p>
+        </div>
+    </div>
 
+    <script>
+        /* --- 1. 3D 卡片鼠标追踪视差效果 --- */
+        const card = document.getElementById('tilt-card');
+        
+        document.addEventListener('mousemove', (e) => {
+            // 只在第一屏具有鼠标移动效果
+            if(window.scrollY > window.innerHeight) return; 
+
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            
+            // 旋转卡片，制造 3D 偏转
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        // 鼠标离开/重置
+        document.addEventListener('mouseleave', () => {
+            card.style.transform = `rotateY(0deg) rotateX(0deg)`;
+        });
+
+        /* --- 2. 滚动丝滑入场动画 (Intersection Observer) --- */
+        const observerOptions = {
+            threshold: 0.1, // 元素露出 10% 时触发
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                    // 触发后停止观察，保持显示状态
+                    observer.unobserve(entry.target); 
+                }
+            });
+        }, observerOptions);
+
+        // 选取所有需要动画的元素
+        const hiddenElements = document.querySelectorAll('.slide-left, .slide-right');
+        hiddenElements.forEach((el) => observer.observe(el));
+    </script>
 </body>
 </html>
