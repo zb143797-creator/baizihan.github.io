@@ -3,330 +3,466 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>白子涵 - 个人数字档案</title>
+    <title>白子涵 | 个人数字档案</title>
     <style>
-        /* 全局基础与极客暗黑主题 */
+        /* ================= 基础全局与极客暗黑主题 ================= */
         :root {
-            --bg-color: #0b0f19;
-            --text-main: #e2e8f0;
-            --text-muted: #94a3b8;
-            --accent-cyan: #06b6d4;
-            --accent-blue: #3b82f6;
-            --card-bg: rgba(30, 41, 59, 0.7);
+            --bg-base: #080b12; --bg-card: rgba(17, 24, 39, 0.8);
+            --text-main: #f1f5f9; --text-muted: #94a3b8;
+            --accent-cyan: #06b6d4; --accent-blue: #3b82f6; --accent-purple: #8b5cf6;
+            --border-glow: rgba(6, 182, 212, 0.3);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.1), transparent 30%),
-                radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.1), transparent 30%);
+            background-color: var(--bg-base); color: var(--text-main);
+            overflow-x: hidden; line-height: 1.6;
+            background-image: radial-gradient(circle at 10% 20%, rgba(6, 182, 212, 0.05), transparent 40%),
+                              radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.05), transparent 40%);
             background-attachment: fixed;
         }
 
-        /* --- 页面切换核心控制 --- */
+        /* ================= SPA 路由核心控制器 ================= */
         .page-view {
-            display: none; /* 默认隐藏所有页面 */
-            opacity: 0;
-            transition: opacity 0.4s ease-in-out;
-            min-height: 100vh;
-            padding-bottom: 50px;
+            display: none; opacity: 0; transition: opacity 0.3s ease;
+            min-height: 100vh; padding-bottom: 60px;
         }
-        .page-view.active {
-            display: block;
-            opacity: 1;
-        }
-
-        /* --- 导航按钮与返回按钮 --- */
+        .page-view.active { display: block; opacity: 1; }
+        
+        /* 公共导航条 */
         .top-nav {
-            padding: 20px 5%;
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            padding: 15px 5%; position: sticky; top: 0; z-index: 100;
+            backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex; justify-content: space-between; align-items: center;
         }
         .btn-back {
-            background: transparent;
-            color: var(--accent-cyan);
-            border: 1px solid var(--accent-cyan);
-            padding: 8px 16px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: all 0.3s;
+            background: rgba(255,255,255,0.05); color: var(--accent-cyan);
+            border: 1px solid var(--border-glow); padding: 8px 20px;
+            border-radius: 20px; cursor: pointer; transition: all 0.3s;
         }
-        .btn-back:hover {
-            background: var(--accent-cyan);
-            color: #000;
+        .btn-back:hover { background: var(--accent-cyan); color: #000; }
+        .breadcrumb { font-size: 0.9em; color: var(--text-muted); }
+
+        /* 公共容器与标题 */
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+        .page-title {
+            font-size: 2.2em; margin-bottom: 30px; border-left: 4px solid var(--accent-cyan);
+            padding-left: 15px; text-shadow: 0 0 20px rgba(6,182,212,0.3);
         }
 
-        /* --- 页面 1：主页 3D 样式 --- */
-        .hero {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            perspective: 1000px;
-            padding-top: 5vh;
-        }
+        /* ================= L1：首页 3D 样式 ================= */
+        .hero { display: flex; flex-direction: column; align-items: center; padding-top: 5vh; perspective: 1000px;}
         .tilt-card {
-            width: 350px; height: 480px;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.1s;
-            border-radius: 20px;
-            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            margin-bottom: 40px;
+            width: 320px; height: 450px; position: relative; transform-style: preserve-3d;
+            border-radius: 20px; margin-bottom: 40px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
         }
         .card-bg {
-            position: absolute; inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            transform: translateZ(0);
-        }
-        .uni-logo {
-            position: absolute; top: 20px; right: 20px; width: 50px;
-            transform: translateZ(20px);
+            position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.01));
+            backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
         }
         .avatar-popout {
-            position: absolute; bottom: 0; left: 50%;
-            transform: translateX(-50%) translateZ(80px) scale(1.1);
-            height: 380px;
-            filter: drop-shadow(0 20px 20px rgba(0,0,0,0.5));
-            pointer-events: none;
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%) translateZ(60px) scale(1.1);
+            height: 350px; pointer-events: none; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
         }
-        .hero-info {
-            position: absolute; bottom: 20px; left: 20px; right: 20px;
-            transform: translateZ(50px);
-        }
-        .hero-info h1 {
-            font-size: 2.2em;
-            background: linear-gradient(to right, var(--accent-cyan), var(--accent-blue));
-            -webkit-background-clip: text; color: transparent; margin-bottom: 5px;
-        }
-
-        /* 主页模块入口按钮 */
-        .module-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            max-width: 600px;
-            width: 90%;
-        }
+        .hero-info { position: absolute; bottom: 20px; left: 20px; transform: translateZ(40px); }
+        .hero-info h1 { background: linear-gradient(to right, #fff, var(--accent-cyan)); -webkit-background-clip: text; color: transparent; font-size: 2em;}
+        
+        .module-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; width: 90%; max-width: 600px; }
         .module-btn {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 20px;
-            border-radius: 15px;
-            color: white;
-            font-size: 1.2em;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
+            background: var(--bg-card); border: 1px solid rgba(255,255,255,0.1); padding: 20px;
+            border-radius: 12px; color: white; cursor: pointer; transition: 0.3s;
         }
-        .module-btn:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-cyan);
-            box-shadow: 0 10px 20px rgba(6, 182, 212, 0.2);
-        }
+        .module-btn:hover { border-color: var(--accent-cyan); transform: translateY(-3px); }
 
-        /* --- 页面 2 & 3：列表与详情页样式 --- */
-        .content-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        .page-title {
-            font-size: 2.5em;
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--accent-blue);
-            padding-bottom: 10px;
-            display: inline-block;
-        }
+        /* ================= L2：列表页样式 (卡片交互) ================= */
         .list-card {
-            background: var(--card-bg);
-            border-left: 4px solid var(--accent-cyan);
-            padding: 25px;
-            border-radius: 0 10px 10px 0;
-            margin-bottom: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
+            background: var(--bg-card); padding: 20px; border-radius: 10px; margin-bottom: 15px;
+            cursor: pointer; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .list-card:hover {
-            background: rgba(30, 41, 59, 0.9);
-            transform: translateX(10px);
-        }
+        .list-card:hover { border-color: var(--accent-cyan); transform: translateX(10px); background: rgba(30,41,59,0.9); }
+        .list-card h3 { color: var(--text-main); font-size: 1.2em; }
+        .list-tag { background: rgba(6,182,212,0.1); color: var(--accent-cyan); padding: 3px 10px; border-radius: 12px; font-size: 0.8em; }
+
+        /* ================= L3：各具特色的详情页排版模板 ================= */
         
-        /* 详情页特有样式 */
-        .detail-header { margin-bottom: 30px; }
-        .detail-meta { color: var(--accent-cyan); margin-bottom: 20px; font-weight: bold; }
-        .detail-text { line-height: 1.8; color: #cbd5e1; font-size: 1.1em; margin-bottom: 30px; }
+        /* 模板 A：科研 (Tech架构风) */
+        .tech-stack { margin: 20px 0; display: flex; gap: 10px; flex-wrap: wrap; }
+        .tech-badge { background: #1e293b; border: 1px solid #334155; padding: 5px 12px; border-radius: 4px; font-family: monospace; color: var(--accent-cyan);}
+        .architecture-box { background: rgba(0,0,0,0.3); border: 1px dashed var(--text-muted); padding: 30px; text-align: center; border-radius: 8px; margin: 20px 0; color: var(--text-muted); }
         
-        /* 图片画廊网格 */
-        .image-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
-        .img-placeholder {
-            background: rgba(255,255,255,0.05);
-            border: 2px dashed rgba(255,255,255,0.2);
-            border-radius: 10px;
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 0.9em;
-            transition: border-color 0.3s;
-        }
-        /* 实际图片的样式 */
-        .gallery-img {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        /* 模板 B：竞赛 (复盘收获风) */
+        .trophy-header { display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #334155; padding-bottom: 20px; margin-bottom: 20px; }
+        .trophy-icon { font-size: 3em; }
+        .takeaway-quote { border-left: 4px solid var(--accent-purple); background: rgba(139, 92, 246, 0.1); padding: 20px; border-radius: 0 8px 8px 0; font-style: italic; margin: 20px 0; }
+        .challenge-vs-solution { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 20px 0; }
+        .cvs-box { background: #111827; padding: 20px; border-radius: 8px; border-top: 3px solid; }
+        .cvs-box.challenge { border-color: #ef4444; } .cvs-box.solution { border-color: #10b981; }
+
+        /* 模板 C：专业能力 (数据与工具风) */
+        .score-circle-container { display: flex; gap: 30px; margin: 30px 0; justify-content: center; flex-wrap: wrap;}
+        .score-circle { width: 120px; height: 120px; border-radius: 50%; border: 6px solid var(--accent-cyan); display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(6,182,212,0.05); }
+        .score-num { font-size: 2em; font-weight: bold; color: #fff; }
+        .tool-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 15px; text-align: center; }
+        .tool-item { background: #1e293b; padding: 15px; border-radius: 8px; transition: 0.3s; }
+        .tool-item:hover { background: var(--accent-blue); transform: translateY(-5px); }
+
+        /* 模板 D：荣誉实践 (纪实排版风) */
+        .story-layout { column-count: 2; column-gap: 30px; color: #cbd5e1; text-align: justify; margin-bottom: 30px; }
+        .big-number { font-size: 3em; color: var(--accent-cyan); font-weight: bold; line-height: 1; }
+        
+        /* 通用图库 */
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .img-ph { background: rgba(255,255,255,0.02); border: 2px dashed rgba(255,255,255,0.1); height: 180px; display: flex; align-items: center; justify-content: center; border-radius: 8px; color: #64748b; font-size: 0.9em; transition: 0.3s;}
+        .img-ph:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+        
+        @media (max-width: 768px) {
+            .story-layout, .challenge-vs-solution { grid-template-columns: 1fr; column-count: 1; }
         }
     </style>
 </head>
 <body>
 
-    <div id="view-home" class="page-view active">
+    <div id="v-home" class="page-view active">
         <div class="hero">
             <div class="tilt-card" id="tilt-card">
                 <div class="card-bg"></div>
-                <img src="https://upload.wikimedia.org/wikipedia/zh/thumb/3/3d/Yanshan_University_logo.svg/1200px-Yanshan_University_logo.svg.png" class="uni-logo">
-                <img src="avatar-transparent.png" class="avatar-popout">
+                <img src="avatar-transparent.png" class="avatar-popout" alt="白子涵">
                 <div class="hero-info">
                     <h1>白子涵</h1>
-                    <p>燕山大学 | 电子信息工程</p>
-                    <p style="font-size:0.85em; color:var(--text-muted); margin-top:5px;">GPA: 4.125/4.5 | 专业前 1.6%</p>
+                    <p style="color: var(--text-muted);">燕山大学 | 电子信息工程</p>
                 </div>
             </div>
-
             <div class="module-grid">
-                <button class="module-btn" onclick="navigateTo('view-research')">🔬 科研经历</button>
-                <button class="module-btn" onclick="navigateTo('view-competition')">🏆 竞赛经历</button>
-                <button class="module-btn">🛠️ 专业能力</button>
-                <button class="module-btn">🎖️ 荣誉与实践</button>
+                <button class="module-btn" onclick="nav('v-l2-research', 'v-home')">🔬 科研经历</button>
+                <button class="module-btn" onclick="nav('v-l2-comp', 'v-home')">🏆 竞赛经历</button>
+                <button class="module-btn" onclick="nav('v-l2-skills', 'v-home')">🛠️ 专业能力</button>
+                <button class="module-btn" onclick="nav('v-l2-honors', 'v-home')">🎖️ 荣誉与实践</button>
             </div>
         </div>
     </div>
 
-    <div id="view-research" class="page-view">
-        <div class="top-nav">
-            <button class="btn-back" onclick="navigateTo('view-home')">← 返回主页</button>
-        </div>
-        <div class="content-container">
-            <h2 class="page-title">科研经历</h2>
-
-            <div class="list-card" onclick="navigateTo('view-detail-reid')">
-                <h3>基于树莓派的跨镜追踪(REID) ➔</h3>
-                <p style="color: var(--text-muted); margin-top: 10px;">点击查看项目详情与演示图片</p>
+    <div id="v-l2-research" class="page-view">
+        <div class="top-nav"><button class="btn-back" onclick="navBack()">← 返回首页</button><span class="breadcrumb">档案 / 科研经历</span></div>
+        <div class="container">
+            <h2 class="page-title">科研项目清单</h2>
+            <div class="list-card" onclick="nav('v-l3-res-reid', 'v-l2-research')">
+                <div><h3>基于树莓派的跨镜追踪(REID)</h3><p class="list-tag" style="margin-top:8px;">项目第二负责人</p></div>
+                <span>➔</span>
             </div>
-
-            <div class="list-card">
-                <h3>面向空天地一体化高灵敏度通信感知智能平台</h3>
-                <p style="color: var(--text-muted); margin-top: 10px;">项目主要负责人 | 2025.10 - 至今</p>
+            <div class="list-card" onclick="nav('v-l3-res-opencv', 'v-l2-research')">
+                <div><h3>基于opencv的人脸属性识别</h3><p class="list-tag" style="margin-top:8px;">校级结项 | 负责人</p></div>
+                <span>➔</span>
             </div>
-
             <div class="list-card">
-                <h3>基于opencv的人脸属性识别</h3>
-                <p style="color: var(--text-muted); margin-top: 10px;">项目主要负责人 | 校级结项</p>
+                <div><h3>面向空天地一体化高灵敏度通信感知智能平台</h3><p class="list-tag" style="margin-top:8px;">进行中 | 负责人</p></div>
+                <span>➔</span>
             </div>
         </div>
     </div>
 
-    <div id="view-detail-reid" class="page-view">
-        <div class="top-nav">
-            <button class="btn-back" onclick="navigateTo('view-research')">← 返回科研列表</button>
+    <div id="v-l2-comp" class="page-view">
+        <div class="top-nav"><button class="btn-back" onclick="navBack()">← 返回首页</button><span class="breadcrumb">档案 / 竞赛经历</span></div>
+        <div class="container">
+            <h2 class="page-title">竞赛斩获榜</h2>
+            <div class="list-card" onclick="nav('v-l3-comp-mcm', 'v-l2-comp')">
+                <div><h3>2025 数学建模美赛 H奖励</h3><p class="list-tag" style="margin-top:8px;">国际级 | 队长</p></div>
+                <span>➔</span>
+            </div>
+            <div class="list-card" onclick="nav('v-l3-comp-stat', 'v-l2-comp')">
+                <div><h3>2025 统计建模省级一等奖</h3><p class="list-tag" style="margin-top:8px;">省级 | 第二负责人</p></div>
+                <span>➔</span>
+            </div>
+            <div class="list-card" onclick="nav('v-l3-comp-dragon', 'v-l2-comp')">
+                <div><h3>2024 数学建模省级二等奖 (板凳龙)</h3><p class="list-tag" style="margin-top:8px;">省级 | 队长</p></div>
+                <span>➔</span>
+            </div>
+            <div class="list-card">
+                <div><h3>2025 “大唐杯”通信技术大赛国家级三等奖</h3><p class="list-tag" style="margin-top:8px;">国家级 | 队长</p></div>
+                <span>➔</span>
+            </div>
+            <div class="list-card">
+                <div><h3>2025 NCCCU 计算机能力挑战赛省级三等奖</h3><p class="list-tag" style="margin-top:8px;">省级 | 个人赛</p></div>
+                <span>➔</span>
+            </div>
+            <div class="list-card">
+                <div><h3>2025 全国大学生电子设计大赛校级二等奖</h3><p class="list-tag" style="margin-top:8px;">负责maxicam算法</p></div>
+                <span>➔</span>
+            </div>
         </div>
-        <div class="content-container">
-            <div class="detail-header">
-                <h2 style="font-size: 2em; color: var(--text-main);">基于树莓派的跨镜追踪(REID)</h2>
-                <div class="detail-meta">项目第二负责人 | 2024.12 - 2025.10</div>
+    </div>
+
+    <div id="v-l2-skills" class="page-view">
+        <div class="top-nav"><button class="btn-back" onclick="navBack()">← 返回首页</button><span class="breadcrumb">档案 / 专业能力</span></div>
+        <div class="container">
+            <h2 class="page-title">知识图谱</h2>
+            <div class="list-card" onclick="nav('v-l3-skill-course', 'v-l2-skills')">
+                <div><h3>核心专业课成绩单</h3><p class="list-tag" style="margin-top:8px;">GPA: 4.125 / 专业前1.6%</p></div>
+                <span>➔</span>
+            </div>
+            <div class="list-card" onclick="nav('v-l3-skill-tools', 'v-l2-skills')">
+                <div><h3>软硬件开发与仿真工具链</h3><p class="list-tag" style="margin-top:8px;">C++ / Python / HFSS 等</p></div>
+                <span>➔</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="v-l2-honors" class="page-view">
+        <div class="top-nav"><button class="btn-back" onclick="navBack()">← 返回首页</button><span class="breadcrumb">档案 / 荣誉与实践</span></div>
+        <div class="container">
+            <h2 class="page-title">荣誉与学生工作</h2>
+            <div class="list-card" onclick="nav('v-l3-honor-scholar', 'v-l2-honors')">
+                <div><h3>校一等奖学金 & 科创之星</h3><p class="list-tag" style="margin-top:8px;">连续四学期 / 院仅五人</p></div>
+                <span>➔</span>
+            </div>
+            <div class="list-card" onclick="nav('v-l3-honor-practice', 'v-l2-honors')">
+                <div><h3>网信部部长 & 志愿服务</h3><p class="list-tag" style="margin-top:8px;">累计服务 210h+</p></div>
+                <span>➔</span>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="v-l3-res-reid" class="page-view">
+        <div class="top-nav"><button class="btn-back" onclick="navBack()">← 放弃查阅</button><span class="breadcrumb">科研 / 树莓派REID</span></div>
+        <div class="container">
+            <h2 style="font-size: 2em; margin-bottom: 5px;">基于树莓派的跨镜追踪(REID)</h2>
+            <p style="color: var(--accent-cyan);">2024.12 - 2025.10 | 边缘智能计算场景</p>
+            
+            <div class="tech-stack">
+                <span class="tech-badge">Raspberry Pi</span>
+                <span class="tech-badge">TensorFlow Lite</span>
+                <span class="tech-badge">INT8 Quantization</span>
+                <span class="tech-badge">Model Pruning</span>
             </div>
 
-            <div class="detail-text">
-                <h3>📌 项目背景与目标</h3>
-                <p style="margin-top: 10px; margin-bottom: 20px;">开发一种以树莓派（Raspberry Pi）为嵌入式载体，融合视觉特征的多模态身份识别系统。系统核心在于实时从多个非重叠视角的摄像机视频流中，自动检测行人并提取其高维判别性视觉特征，通过特征匹配与决策融合，实现对同一行人在不同摄像机下的精准关联与追踪。</p>
+            <div style="margin-top: 30px; color: #cbd5e1;">
+                <h3 style="color: #fff; margin-bottom: 10px;">>_ 系统核心机理</h3>
+                <p>在多个非重叠视角的摄像机视频流中，自动检测行人并提取高维视觉特征。通过特征匹配融合，实现精准关联追踪。</p>
                 
-                <h3>💻 我的核心工作</h3>
-                <ul style="margin-top: 10px; margin-left: 20px;">
-                    <li>负责全面利用 TensorFlow Lite (TFLite) 工具链。</li>
-                    <li>对检测与 Re-ID 模型进行深度量化（INT8）与模型剪枝。</li>
-                    <li>实现模型尺寸和计算资源的最小化，确保模型在树莓派上的高帧率运行。</li>
+                <h3 style="color: #fff; margin-top: 25px; margin-bottom: 10px;">>_ 我的核心贡献 (底层优化)</h3>
+                <ul style="padding-left: 20px;">
+                    <li>全面主导 TFLite 工具链的嵌入式部署。</li>
+                    <li>执行深度的 <strong>INT8 模型量化</strong>与<strong>网络剪枝</strong>。</li>
+                    <li>在极限压榨树莓派计算资源的前提下，确保了跨镜追踪的高帧率实时运行。</li>
                 </ul>
             </div>
 
-            <h3>📸 过程与成果展示</h3>
-            <div class="image-gallery">
-                <div class="img-placeholder">在这里放实物照片 (代码见注释)</div>
-                
-                <div class="img-placeholder">在这里放算法流程图/UI界面</div>
-                <div class="img-placeholder">在这里放测试结果图</div>
+            <div class="architecture-box">
+                [ 在此处放置系统网络拓扑图 或 边缘计算数据流转图 ]
+            </div>
+            <div class="gallery-grid">
+                <div class="img-ph">树莓派运行实物图</div>
+                <div class="img-ph">监控视角UI识别截图</div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="v-l3-res-opencv" class="page-view">
+        <div class="top-nav"><button class="btn-back" onclick="navBack()">← 返回列表</button></div>
+        <div class="container">
+            <h2>基于 OpenCV 的人脸属性识别</h2>
+            <div class="tech-stack">
+                <span class="tech-badge">OpenCV</span>
+                <span class="tech-badge">Haar Cascade</span>
+                <span class="tech-badge">SVM</span>
+            </div>
+            <p style="margin-top:20px;">利用 Haar 级联分类器进行实时人脸检测，分析纹理与轮廓，结合传统机器学习核心 SVM 实现性别、情绪的精准分类判别。项目最终获得校级结项。</p>
+            <div class="gallery-grid">
+                <div class="img-ph">特征提取流程图</div>
+                <div class="img-ph">性别/情绪识别演示图</div>
             </div>
         </div>
     </div>
 
-    <div id="view-competition" class="page-view">
-        <div class="top-nav">
-            <button class="btn-back" onclick="navigateTo('view-home')">← 返回主页</button>
-        </div>
-        <div class="content-container">
-            <h2 class="page-title">竞赛经历</h2>
-            <div class="list-card">
-                <h3>2025数学建模美赛 H奖励 (队长)</h3>
+    <div id="v-l3-comp-mcm" class="page-view">
+        <div class="top-nav"><button class="btn-back" onclick="navBack()">← 返回竞赛池</button><span class="breadcrumb">竞赛 / 2025美赛</span></div>
+        <div class="container">
+            <div class="trophy-header">
+                <div class="trophy-icon">🏆</div>
+                <div>
+                    <h2 style="margin: 0;">2025 美国大学生数学建模竞赛</h2>
+                    <p style="color: var(--accent-cyan); font-weight: bold;">H奖励 (Honorable Mention) | 队长</p>
+                </div>
             </div>
-            <div class="list-card">
-                <h3>2025统计建模省级 一等奖 (第二负责人)</h3>
+
+            <div class="takeaway-quote">
+                "真正的可持续并非数据的堆砌，而是能在朱诺和三亚的真实生态中找到经济、社会与环境的非线性平衡点。" —— 赛后复盘记
+            </div>
+
+            <div class="challenge-vs-solution">
+                <div class="cvs-box challenge">
+                    <h3 style="color: #ef4444; margin-bottom: 10px;">赛题挑战：旅游业可持续发展</h3>
+                    <p>变量极其繁杂：需综合衡量旅游人数、自然环境承载力、基础设施消耗以及税收政策的动态博弈关系。</p>
+                </div>
+                <div class="cvs-box solution">
+                    <h3 style="color: #10b981; margin-bottom: 10px;">破局与建模方案</h3>
+                    <p>构建多元线性和非线性规划模型，建立多目标规划，最终通过<strong>序贯二次规划算法 (SQP)</strong> 进行精准求解，并在朱诺与三亚两个城市进行了沙盘推演验证。</p>
+                </div>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="img-ph">美赛获奖证书扫描件</div>
+                <div class="img-ph">SQP算法求解收敛曲线图</div>
+                <div class="img-ph">朱诺/三亚可持续推演散点图</div>
             </div>
         </div>
     </div>
 
+    <div id="v-l3-comp-stat" class="page-view">
+        <div class="top-nav"><button class="btn-back" onclick="navBack()">← 返回</button></div>
+        <div class="container">
+            <h2>2025 统计建模省级一等奖</h2>
+            <p><strong>课题：</strong>基于K-means聚类和AMISA时间序列预测的农业灾害防控</p>
+            <div class="takeaway-quote">在缺失且杂乱的农业数据中，我学会了用 SPSS 多重插补法“抢救”数据。利用 K-means 揭示灾害暗纹，用 ARIMA 进行时序预测，并用残差检验给模型上了最后一道锁。</div>
+            <div class="gallery-grid"><div class="img-ph">聚类散点图</div><div class="img-ph">时序预测趋势图</div></div>
+        </div>
+    </div>
+    
+    <div id="v-l3-comp-dragon" class="page-view">
+        <div class="top-nav"><button class="btn-back" onclick="navBack()">← 返回</button></div>
+        <div class="container">
+            <h2>2024 数学建模省级二等奖</h2>
+            <p><strong>课题：</strong>基于螺旋线原理的“板凳龙”运动过程优化设计</p>
+            <div class="takeaway-quote">利用牛顿迭代法硬刚“板凳龙”运动方程，从循迹、行停到 S 形曲线最短路径，深刻体会了理论数学在民间物理运动中的威力。</div>
+            <div class="gallery-grid"><div class="img-ph">螺距优化图</div><div class="img-ph">S形曲线计算模型图</div></div>
+        </div>
+    </div>
+
+    <div id="v-l3-skill-course" class="page-view">
+        <div class="top-nav"><button class="btn-back" onclick="navBack()">← 返回技能树</button><span class="breadcrumb">能力 / 核心课成绩</span></div>
+        <div class="container">
+            <h2 style="text-align: center;">专业核心课战斗力雷达</h2>
+            
+            <div class="score-circle-container">
+                <div class="score-circle">
+                    <div class="score-num">96</div><div style="font-size: 0.8em; color: var(--accent-cyan);">C++ 面向对象</div>
+                </div>
+                <div class="score-circle">
+                    <div class="score-num">95</div><div style="font-size: 0.8em; color: var(--accent-cyan);">电磁场与微波</div>
+                </div>
+                <div class="score-circle">
+                    <div class="score-num">96</div><div style="font-size: 0.8em; color: var(--accent-cyan);">高等数学AⅡ</div>
+                </div>
+                <div class="score-circle">
+                    <div class="score-num">93</div><div style="font-size: 0.8em; color: var(--accent-cyan);">信号与系统</div>
+                </div>
+                <div class="score-circle">
+                    <div class="score-num">92</div><div style="font-size: 0.8em; color: var(--accent-cyan);">数字信号处理</div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px; color: #cbd5e1;">
+                <p>极高扎实的数学与信号处理基石（专业排名 <span style="color:#fff; font-weight:bold;">前 1.6%</span>），为后续复杂计算机视觉、通信感知系统及各种大型数学建模竞赛提供了坚不可摧的底层支撑。</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="v-l3-skill-tools" class="page-view">
+        <div class="top-nav"><button class="btn-back" onclick="navBack()">← 返回技能树</button></div>
+        <div class="container">
+            <h2>我的武器库</h2>
+            <h3 style="margin: 20px 0 10px; color: var(--accent-cyan);">编程与算法</h3>
+            <div class="tool-grid">
+                <div class="tool-item">C++</div><div class="tool-item">Python</div><div class="tool-item">VHDL</div><div class="tool-item">OpenCV</div>
+            </div>
+            
+            <h3 style="margin: 30px 0 10px; color: var(--accent-cyan);">仿真与数学分析</h3>
+            <div class="tool-grid">
+                <div class="tool-item">Matlab</div><div class="tool-item">SPSS</div><div class="tool-item">HFSS</div><div class="tool-item">QuartusⅡ</div>
+                <div class="tool-item">Multisim</div><div class="tool-item">SOLIDWORKS</div><div class="tool-item">Keil</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="v-l3-honor-practice" class="page-view">
+        <div class="top-nav"><button class="btn-back" onclick="navBack()">← 返回荣誉榜</button><span class="breadcrumb">荣誉 / 社会实践</span></div>
+        <div class="container">
+            <h2>从实验室走到讲台，从理论走向现场</h2>
+            
+            <div style="display: flex; gap: 40px; margin: 30px 0; border-bottom: 1px solid #334; padding-bottom: 30px;">
+                <div>
+                    <div class="big-number">160<span style="font-size:0.5em;">h+</span></div>
+                    <p style="color:var(--accent-cyan); font-weight:bold;">网信协会组织讲座</p>
+                </div>
+                <div>
+                    <div class="big-number">50<span style="font-size:0.5em;">h+</span></div>
+                    <p style="color:var(--accent-cyan); font-weight:bold;">学科强项定点帮扶</p>
+                </div>
+            </div>
+
+            <div class="story-layout">
+                <p>担任燕山大学网络信息协会部门部长期间，我不仅自己深耕技术，更热衷于技术的传播与共享。通过组织策划各类课程讲座，累计劳动服务时长超过160小时，在统筹与协调中极大锻炼了领导力与团队调度能力。</p>
+                <p>此外，作为班级学习委员与优秀新生班主任，我充分发挥了自身在 C++、高数等科目的专业优势，开展了超过 50 小时的定点帮扶工作。</p>
+                <p>2025年6月，在河北省青少年无人机大赛中，我作为核心操作类比赛区志愿者，承担了现场问题解惑与突发应急处理的高压任务，将理论应变能力完全落地于实体赛事保障之中。</p>
+            </div>
+
+            <div class="gallery-grid">
+                <div class="img-ph">组织课程讲座现场图</div>
+                <div class="img-ph">无人机大赛志愿服务合影</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="v-l3-honor-scholar" class="page-view">
+        <div class="top-nav"><button class="btn-back" onclick="navBack()">← 返回</button></div>
+        <div class="container">
+            <h2 style="color: gold;">🏆 科创之星 & 连续一等奖学金</h2>
+            <div class="takeaway-quote">在内卷的时代，保持专注。"科创之星"（全院仅评选五人）不仅是对我技术项目的认可，更是对我连续四学期将成绩稳定在前 2% 的硬核证明。此外，连续两年获评校三好学生及优秀共青团员，印证了德智体美劳的全面发展。</div>
+            <div class="gallery-grid"><div class="img-ph">奖学金证书展示</div><div class="img-ph">科创之星颁奖图片</div></div>
+        </div>
+    </div>
 
     <script>
-        /* 页面切换逻辑 */
-        function navigateTo(targetViewId) {
-            // 1. 找到所有页面并执行淡出
-            const views = document.querySelectorAll('.page-view');
-            views.forEach(view => {
-                view.style.opacity = 0;
+        // 路由历史栈，用于支持聪明的返回键
+        let historyStack = ['v-home'];
+
+        function nav(targetId, currentId) {
+            // 入栈
+            if (currentId) historyStack.push(targetId);
+            
+            // 隐藏所有页面
+            document.querySelectorAll('.page-view').forEach(el => {
+                el.style.opacity = 0;
             });
 
-            // 2. 延迟等待淡出动画结束后，切换 display 属性并淡入新页面
+            // 等待淡出完成后，切换 active 状态
             setTimeout(() => {
-                views.forEach(view => {
-                    view.classList.remove('active');
+                document.querySelectorAll('.page-view').forEach(el => {
+                    el.classList.remove('active');
                 });
                 
-                const targetView = document.getElementById(targetViewId);
+                const targetView = document.getElementById(targetId);
                 targetView.classList.add('active');
                 
-                // 强制浏览器重绘，确保 transition 生效
-                void targetView.offsetWidth; 
+                // 强制重绘，应用淡入效果
+                void targetView.offsetWidth;
                 targetView.style.opacity = 1;
                 
-                // 每次切换页面时，自动滚动到顶部
-                window.scrollTo(0, 0);
-            }, 300); // 300ms 对应 CSS 中的动画时间
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 300);
         }
 
-        /* 主页 3D 卡片鼠标追踪逻辑 */
+        // 聪明的返回逻辑
+        function navBack() {
+            if (historyStack.length > 1) {
+                const currentId = historyStack.pop(); // 弹出当前页
+                const previousId = historyStack[historyStack.length - 1]; // 获取上一页
+                
+                // 特殊处理，如果不传 currentId 相当于直接跳回
+                nav(previousId, null); 
+            } else {
+                // 容错：如果栈空了，强行回主页
+                nav('v-home', null);
+            }
+        }
+
+        // 仅主页生效的 3D 卡片效果
         const card = document.getElementById('tilt-card');
         document.addEventListener('mousemove', (e) => {
-            // 只有当主页处于激活状态时才执行 3D 计算
-            if (!document.getElementById('view-home').classList.contains('active')) return;
-            
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            if (!document.getElementById('v-home').classList.contains('active')) return;
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
             card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
         document.addEventListener('mouseleave', () => {
