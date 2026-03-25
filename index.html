@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>白子涵 - 个人数字档案</title>
     <style>
-        /* 全局现代极客风重置 */
+        /* 全局基础与极客暗黑主题 */
         :root {
             --bg-color: #0b0f19;
             --text-main: #e2e8f0;
@@ -16,285 +16,322 @@
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.15), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.15), transparent 25%);
+                radial-gradient(circle at 15% 50%, rgba(6, 182, 212, 0.1), transparent 30%),
+                radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.1), transparent 30%);
             background-attachment: fixed;
         }
 
-        /* 导航栏 */
-        nav {
-            position: fixed;
-            top: 0; width: 100%;
-            background: rgba(11, 15, 25, 0.8);
-            backdrop-filter: blur(10px);
-            padding: 20px 0;
-            text-align: center;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        nav a {
-            color: var(--text-main);
-            text-decoration: none;
-            margin: 0 15px;
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-        nav a:hover { color: var(--accent-cyan); }
-
-        /* --- 核心：3D 头部全屏展示区 --- */
-        .hero {
+        /* --- 页面切换核心控制 --- */
+        .page-view {
+            display: none; /* 默认隐藏所有页面 */
+            opacity: 0;
+            transition: opacity 0.4s ease-in-out;
             min-height: 100vh;
+            padding-bottom: 50px;
+        }
+        .page-view.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* --- 导航按钮与返回按钮 --- */
+        .top-nav {
+            padding: 20px 5%;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .btn-back {
+            background: transparent;
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        .btn-back:hover {
+            background: var(--accent-cyan);
+            color: #000;
+        }
+
+        /* --- 页面 1：主页 3D 样式 --- */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            perspective: 1000px;
+            padding-top: 5vh;
+        }
+        .tilt-card {
+            width: 350px; height: 480px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.1s;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            margin-bottom: 40px;
+        }
+        .card-bg {
+            position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            transform: translateZ(0);
+        }
+        .uni-logo {
+            position: absolute; top: 20px; right: 20px; width: 50px;
+            transform: translateZ(20px);
+        }
+        .avatar-popout {
+            position: absolute; bottom: 0; left: 50%;
+            transform: translateX(-50%) translateZ(80px) scale(1.1);
+            height: 380px;
+            filter: drop-shadow(0 20px 20px rgba(0,0,0,0.5));
+            pointer-events: none;
+        }
+        .hero-info {
+            position: absolute; bottom: 20px; left: 20px; right: 20px;
+            transform: translateZ(50px);
+        }
+        .hero-info h1 {
+            font-size: 2.2em;
+            background: linear-gradient(to right, var(--accent-cyan), var(--accent-blue));
+            -webkit-background-clip: text; color: transparent; margin-bottom: 5px;
+        }
+
+        /* 主页模块入口按钮 */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            max-width: 600px;
+            width: 90%;
+        }
+        .module-btn {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 15px;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .module-btn:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-cyan);
+            box-shadow: 0 10px 20px rgba(6, 182, 212, 0.2);
+        }
+
+        /* --- 页面 2 & 3：列表与详情页样式 --- */
+        .content-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        .page-title {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--accent-blue);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+        .list-card {
+            background: var(--card-bg);
+            border-left: 4px solid var(--accent-cyan);
+            padding: 25px;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .list-card:hover {
+            background: rgba(30, 41, 59, 0.9);
+            transform: translateX(10px);
+        }
+        
+        /* 详情页特有样式 */
+        .detail-header { margin-bottom: 30px; }
+        .detail-meta { color: var(--accent-cyan); margin-bottom: 20px; font-weight: bold; }
+        .detail-text { line-height: 1.8; color: #cbd5e1; font-size: 1.1em; margin-bottom: 30px; }
+        
+        /* 图片画廊网格 */
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        .img-placeholder {
+            background: rgba(255,255,255,0.05);
+            border: 2px dashed rgba(255,255,255,0.2);
+            border-radius: 10px;
+            height: 200px;
             display: flex;
             align-items: center;
             justify-content: center;
-            perspective: 1000px; /* 3D 景深 */
-            padding-top: 60px;
+            color: var(--text-muted);
+            font-size: 0.9em;
+            transition: border-color 0.3s;
         }
-        
-        /* 3D 卡片容器 */
-        .tilt-card {
-            width: 400px;
-            height: 550px;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.1s ease; /* 鼠标移动时的平滑度 */
-            border-radius: 20px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        /* 实际图片的样式 */
+        .gallery-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
-
-        /* 卡片背景层 */
-        .card-bg {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
-            border: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(20px);
-            border-radius: 20px;
-            transform: translateZ(0);
-            overflow: hidden;
-        }
-
-        /* 燕山大学校徽 (背景层) */
-        .uni-logo {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 60px;
-            opacity: 0.8;
-            transform: translateZ(20px);
-        }
-
-        /* 3D 破框而出的人物照片 */
-        .avatar-popout {
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%) translateZ(80px) scale(1.1); /* 核心：Z轴拉升产生立体感 */
-            height: 400px; /* 根据你的照片高度调整 */
-            pointer-events: none; /* 让鼠标事件穿透到卡片底板 */
-            filter: drop-shadow(0 20px 20px rgba(0,0,0,0.5));
-        }
-
-        /* 个人信息悬浮层 */
-        .hero-info {
-            position: absolute;
-            bottom: 30px;
-            left: 30px;
-            right: 30px;
-            transform: translateZ(50px);
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        }
-        .hero-info h1 {
-            font-size: 2.5em;
-            background: linear-gradient(to right, var(--accent-cyan), var(--accent-blue));
-            -webkit-background-clip: text;
-            color: transparent;
-            margin-bottom: 5px;
-        }
-        .hero-info p { font-size: 1.1em; color: #ddd; }
-
-        /* --- 丝滑滚动内容区块 --- */
-        .section-container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 80px 20px;
-            overflow-x: hidden; /* 防止滑动时的横向滚动条 */
-        }
-        h2.section-title {
-            font-size: 2em;
-            margin-bottom: 40px;
-            display: inline-block;
-            border-bottom: 3px solid var(--accent-cyan);
-            padding-bottom: 10px;
-        }
-
-        /* 内容卡片 */
-        .content-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 15px;
-            padding: 30px;
-            margin-bottom: 25px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .content-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.2);
-            border-color: rgba(6, 182, 212, 0.4);
-        }
-        .content-card h3 { color: var(--accent-cyan); margin-bottom: 10px; font-size: 1.4em;}
-        .card-meta { font-size: 0.9em; color: var(--accent-blue); margin-bottom: 15px; }
-        
-        /* --- 核心：滚动入场动画样式 (初始状态) --- */
-        .slide-left {
-            opacity: 0;
-            transform: translateX(-100px);
-            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        .slide-right {
-            opacity: 0;
-            transform: translateX(100px);
-            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-        /* JavaScript 触发的显示状态 */
-        .slide-left.show, .slide-right.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        
     </style>
 </head>
 <body>
 
-    <nav>
-        <a href="#home">首页</a>
-        <a href="#research">科研经历</a>
-        <a href="#competition">竞赛经历</a>
-        <a href="#skills">专业能力</a>
-    </nav>
+    <div id="view-home" class="page-view active">
+        <div class="hero">
+            <div class="tilt-card" id="tilt-card">
+                <div class="card-bg"></div>
+                <img src="https://upload.wikimedia.org/wikipedia/zh/thumb/3/3d/Yanshan_University_logo.svg/1200px-Yanshan_University_logo.svg.png" class="uni-logo">
+                <img src="avatar-transparent.png" class="avatar-popout">
+                <div class="hero-info">
+                    <h1>白子涵</h1>
+                    <p>燕山大学 | 电子信息工程</p>
+                    <p style="font-size:0.85em; color:var(--text-muted); margin-top:5px;">GPA: 4.125/4.5 | 专业前 1.6%</p>
+                </div>
+            </div>
 
-    <section id="home" class="hero">
-        <div class="tilt-card" id="tilt-card">
-            <div class="card-bg"></div>
-            
-            <img src="https://upload.wikimedia.org/wikipedia/zh/thumb/3/3d/Yanshan_University_logo.svg/1200px-Yanshan_University_logo.svg.png" alt="燕山大学校徽" class="uni-logo">
-            
-            <img src="avatar-transparent.png" alt="白子涵" class="avatar-popout">
-            
-            <div class="hero-info">
-                <h1>白子涵 [cite: 71]</h1>
-                <p>电子信息工程 [cite: 45] | 燕山大学 [cite: 45]</p>
-                <p style="font-size: 0.9em; margin-top: 5px; color: var(--text-muted);">
-                    擅长视觉算法、软硬件结合与数学建模
-                </p>
+            <div class="module-grid">
+                <button class="module-btn" onclick="navigateTo('view-research')">🔬 科研经历</button>
+                <button class="module-btn" onclick="navigateTo('view-competition')">🏆 竞赛经历</button>
+                <button class="module-btn">🛠️ 专业能力</button>
+                <button class="module-btn">🎖️ 荣誉与实践</button>
             </div>
         </div>
-    </section>
+    </div>
 
-    <div class="section-container" id="research">
-        <h2 class="section-title slide-left">科研经历 🔬</h2>
-        
-        <div class="content-card slide-left">
-            <h3>面向空天地一体化高灵敏度通信感知智能平台 [cite: 36]</h3>
-            <div class="card-meta">项目主要负责人 | 2025.10 - 至今</div>
-            <p>致力于前沿通信感知技术的智能化平台研发与实现。</p>
+    <div id="view-research" class="page-view">
+        <div class="top-nav">
+            <button class="btn-back" onclick="navigateTo('view-home')">← 返回主页</button>
         </div>
+        <div class="content-container">
+            <h2 class="page-title">科研经历</h2>
 
-        <div class="content-card slide-left" style="transition-delay: 0.1s;">
-            <h3>基于树莓派的跨镜追踪(REID) [cite: 32]</h3>
-            <div class="card-meta">项目第二负责人 | 2024.12 - 2025.10</div>
-            <p>融合视觉特征的多模态身份识别系统。全面利用 TensorFlow Lite 工具链对检测与 Re-ID 模型进行 INT8 深度量化与模型剪枝，确保在树莓派嵌入式载体上的高帧率运行 [cite: 33, 34]。</p>
-        </div>
+            <div class="list-card" onclick="navigateTo('view-detail-reid')">
+                <h3>基于树莓派的跨镜追踪(REID) ➔</h3>
+                <p style="color: var(--text-muted); margin-top: 10px;">点击查看项目详情与演示图片</p>
+            </div>
 
-        <div class="content-card slide-left" style="transition-delay: 0.2s;">
-            <h3>基于opencv的人脸属性识别 [cite: 29]</h3>
-            <div class="card-meta">项目主要负责人 | 2023.12 - 2024.10</div>
-            <p>利用传统计算机视觉技术，通过 Haar 级联分类器与 SVM 支持向量机结合，实现从复杂背景中提取人脸纹理轮廓，并进行性别、情绪等属性的精准判别 [cite: 30, 31]。</p>
+            <div class="list-card">
+                <h3>面向空天地一体化高灵敏度通信感知智能平台</h3>
+                <p style="color: var(--text-muted); margin-top: 10px;">项目主要负责人 | 2025.10 - 至今</p>
+            </div>
+
+            <div class="list-card">
+                <h3>基于opencv的人脸属性识别</h3>
+                <p style="color: var(--text-muted); margin-top: 10px;">项目主要负责人 | 校级结项</p>
+            </div>
         </div>
     </div>
 
-    <div class="section-container" id="competition">
-        <h2 class="section-title slide-right">竞赛经历 🏆</h2>
-        
-        <div class="content-card slide-right">
-            <h3>2025数学建模美赛 H奖励 [cite: 3]</h3>
-            <div class="card-meta">队长</div>
-            <p>研究《OptimizationIssues : Sustainable Tourism Development》，构建多元线性和非线性规划模型，建立多目标规划模型并通过序贯二次规划算法进行求解 [cite: 4]。</p>
+    <div id="view-detail-reid" class="page-view">
+        <div class="top-nav">
+            <button class="btn-back" onclick="navigateTo('view-research')">← 返回科研列表</button>
         </div>
+        <div class="content-container">
+            <div class="detail-header">
+                <h2 style="font-size: 2em; color: var(--text-main);">基于树莓派的跨镜追踪(REID)</h2>
+                <div class="detail-meta">项目第二负责人 | 2024.12 - 2025.10</div>
+            </div>
 
-        <div class="content-card slide-right" style="transition-delay: 0.1s;">
-            <h3>2025统计建模省级 一等奖 [cite: 5]</h3>
-            <div class="card-meta">第二负责人</div>
-            <p>利用 SPSS 多重插补法、K-means 聚类算法以及 ARIMA 时序预测模型，构建了农业灾害防控研究体系 [cite: 6]。</p>
-        </div>
+            <div class="detail-text">
+                <h3>📌 项目背景与目标</h3>
+                <p style="margin-top: 10px; margin-bottom: 20px;">开发一种以树莓派（Raspberry Pi）为嵌入式载体，融合视觉特征的多模态身份识别系统。系统核心在于实时从多个非重叠视角的摄像机视频流中，自动检测行人并提取其高维判别性视觉特征，通过特征匹配与决策融合，实现对同一行人在不同摄像机下的精准关联与追踪。</p>
+                
+                <h3>💻 我的核心工作</h3>
+                <ul style="margin-top: 10px; margin-left: 20px;">
+                    <li>负责全面利用 TensorFlow Lite (TFLite) 工具链。</li>
+                    <li>对检测与 Re-ID 模型进行深度量化（INT8）与模型剪枝。</li>
+                    <li>实现模型尺寸和计算资源的最小化，确保模型在树莓派上的高帧率运行。</li>
+                </ul>
+            </div>
 
-        <div class="content-card slide-right" style="transition-delay: 0.2s;">
-            <h3>全国大学生电子设计大赛 校级二等奖 [cite: 11]</h3>
-            <div class="card-meta">负责 maxicam 视觉算法模块 [cite: 11]</div>
+            <h3>📸 过程与成果展示</h3>
+            <div class="image-gallery">
+                <div class="img-placeholder">在这里放实物照片 (代码见注释)</div>
+                
+                <div class="img-placeholder">在这里放算法流程图/UI界面</div>
+                <div class="img-placeholder">在这里放测试结果图</div>
+            </div>
         </div>
     </div>
 
-    <div class="section-container" id="skills">
-        <h2 class="section-title slide-left">专业能力 🛠️</h2>
-        
-        <div class="content-card slide-left">
-            <h3>核心技能栈</h3>
-            <p style="margin-top: 10px; line-height: 2;">
-                <span style="background: rgba(6,182,212,0.2); color: #fff; padding: 5px 12px; border-radius: 20px; margin-right: 10px;">C++ / Python / VHDL</span>
-                <span style="background: rgba(59,130,246,0.2); color: #fff; padding: 5px 12px; border-radius: 20px; margin-right: 10px;">OpenCV / 视觉算法</span>
-                <span style="background: rgba(139,92,246,0.2); color: #fff; padding: 5px 12px; border-radius: 20px; margin-right: 10px;">TensorFlow Lite</span>
-                <span style="background: rgba(236,72,153,0.2); color: #fff; padding: 5px 12px; border-radius: 20px; margin-right: 10px;">Matlab / SPSS</span>
-            </p>
-            <p style="margin-top: 15px; color: var(--text-muted);">
-                掌握图像处理工具和深度学习方法，熟练运用 HFSS、QuartusⅡ、multisim、SOLIDWORKS、keil 等仿真工具 [cite: 49]。
-            </p>
+    <div id="view-competition" class="page-view">
+        <div class="top-nav">
+            <button class="btn-back" onclick="navigateTo('view-home')">← 返回主页</button>
+        </div>
+        <div class="content-container">
+            <h2 class="page-title">竞赛经历</h2>
+            <div class="list-card">
+                <h3>2025数学建模美赛 H奖励 (队长)</h3>
+            </div>
+            <div class="list-card">
+                <h3>2025统计建模省级 一等奖 (第二负责人)</h3>
+            </div>
         </div>
     </div>
+
 
     <script>
-        /* --- 1. 3D 卡片鼠标追踪视差效果 --- */
-        const card = document.getElementById('tilt-card');
-        
-        document.addEventListener('mousemove', (e) => {
-            // 只在第一屏具有鼠标移动效果
-            if(window.scrollY > window.innerHeight) return; 
+        /* 页面切换逻辑 */
+        function navigateTo(targetViewId) {
+            // 1. 找到所有页面并执行淡出
+            const views = document.querySelectorAll('.page-view');
+            views.forEach(view => {
+                view.style.opacity = 0;
+            });
 
+            // 2. 延迟等待淡出动画结束后，切换 display 属性并淡入新页面
+            setTimeout(() => {
+                views.forEach(view => {
+                    view.classList.remove('active');
+                });
+                
+                const targetView = document.getElementById(targetViewId);
+                targetView.classList.add('active');
+                
+                // 强制浏览器重绘，确保 transition 生效
+                void targetView.offsetWidth; 
+                targetView.style.opacity = 1;
+                
+                // 每次切换页面时，自动滚动到顶部
+                window.scrollTo(0, 0);
+            }, 300); // 300ms 对应 CSS 中的动画时间
+        }
+
+        /* 主页 3D 卡片鼠标追踪逻辑 */
+        const card = document.getElementById('tilt-card');
+        document.addEventListener('mousemove', (e) => {
+            // 只有当主页处于激活状态时才执行 3D 计算
+            if (!document.getElementById('view-home').classList.contains('active')) return;
+            
             const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
             const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-            
-            // 旋转卡片，制造 3D 偏转
             card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
         });
-
-        // 鼠标离开/重置
         document.addEventListener('mouseleave', () => {
             card.style.transform = `rotateY(0deg) rotateX(0deg)`;
         });
-
-        /* --- 2. 滚动丝滑入场动画 (Intersection Observer) --- */
-        const observerOptions = {
-            threshold: 0.1, // 元素露出 10% 时触发
-            rootMargin: "0px 0px -50px 0px"
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('show');
-                    // 触发后停止观察，保持显示状态
-                    observer.unobserve(entry.target); 
-                }
-            });
-        }, observerOptions);
-
-        // 选取所有需要动画的元素
-        const hiddenElements = document.querySelectorAll('.slide-left, .slide-right');
-        hiddenElements.forEach((el) => observer.observe(el));
     </script>
 </body>
 </html>
